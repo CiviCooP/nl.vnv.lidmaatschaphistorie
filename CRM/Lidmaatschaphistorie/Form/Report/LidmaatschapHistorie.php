@@ -37,7 +37,7 @@
  * BOS1502448 vnv.nl - lidmaatschap historie
  * This is a copy of the original Activity Report 
  */
-class CRM_Lidmaatschap_Form_Report_LidmaatschapHistorie extends CRM_Report_Form {
+class CRM_Lidmaatschaphistorie_Form_Report_LidmaatschapHistorie extends CRM_Report_Form {
   protected $_selectAliasesTotal = array();
 
   protected $_customGroupExtends = array(

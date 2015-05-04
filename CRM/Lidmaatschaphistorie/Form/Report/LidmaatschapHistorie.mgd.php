@@ -6,15 +6,15 @@
 return array (
   0 => 
   array (
-    'name' => 'CRM_Lidmaatschap_Form_Report_LidmaatschapHistorie',
+    'name' => 'CRM_Lidmaatschaphistorie_Form_Report_LidmaatschapHistorie',
     'entity' => 'ReportTemplate',
     'params' => 
     array (
       'version' => 3,
       'label' => 'LidmaatschapHistorie',
-      'description' => 'LidmaatschapHistorie (nl.vnv.lidmaatschap)',
-      'class_name' => 'CRM_Lidmaatschap_Form_Report_LidmaatschapHistorie',
-      'report_url' => 'nl.vnv.lidmaatschap/lidmaatschaphistorie',
+      'description' => 'LidmaatschapHistorie (nl.vnv.lidmaatschaphistorie)',
+      'class_name' => 'CRM_Lidmaatschaphistorie_Form_Report_LidmaatschapHistorie',
+      'report_url' => 'nl.vnv.lidmaatschaphistorie/lidmaatschaphistorie',
       'component' => '',
     ),
   ),

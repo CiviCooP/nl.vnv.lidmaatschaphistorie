@@ -49,7 +49,7 @@ class CRM_Lidmaatschaphistorie_Config {
    */
   public static function &singleton() {
     if (self::$_singleton === NULL) {
-      self::$_singleton = new CRM_Lidmaatschap_Config();
+      self::$_singleton = new CRM_Lidmaatschaphistorie_Config();
     }
     return self::$_singleton;
   }
