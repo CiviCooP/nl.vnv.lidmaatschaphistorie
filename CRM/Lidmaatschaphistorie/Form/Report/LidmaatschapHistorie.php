@@ -240,7 +240,7 @@ class CRM_Lidmaatschaphistorie_Form_Report_LidmaatschapHistorie extends CRM_Repo
         ),
         'filters' => array(
           'activity_date_time' => array(
-            //'default' => 'this.month', // BOS1502448 vnv.nl - lidmaatschap historie - no default, the have to choose
+            'default' => '0', // BOS1502448 vnv.nl - lidmaatschap historie - no default, the have to choose a period
             'operatorType' => CRM_Report_Form::OP_DATE,
           ),
           'activity_subject' =>
