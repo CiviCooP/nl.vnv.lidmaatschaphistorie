@@ -527,7 +527,7 @@ class CRM_Lidmaatschaphistorie_Form_Report_LidmaatschapHistorie extends CRM_Repo
     $this->_from .= "
       LEFT JOIN civicrm_membership  membership_civireport 
         ON membership_civireport.contact_id = activity_contact_civireport.contact_id AND
-            (membership_civireport.start_date <= '" . date('Y-m-d') . "' AND membership_civireport.end_date >= '" . date('Y-m-d') . "') AND
+            (membership_civireport.start_date <= '" . date('Y-m-d') . "' AND (membership_civireport.end_date >= '" . date('Y-m-d') . "' OR membership_civireport.end_date IS NULL)) AND
             membership_civireport.status_id = '9'";
     
     
