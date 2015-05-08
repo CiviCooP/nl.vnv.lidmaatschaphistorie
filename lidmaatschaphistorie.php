@@ -142,7 +142,7 @@ function lidmaatschap_historie($op, $id, $params){
       lidmaatschap_historie_activity($lidmaatschap_config, $params, $activity_params);
     }
   }
-  
+    
   if('delete' == $op){
     foreach($params as $membership_id => $membership){
       $activity_params = lidmaatschap_historie_delete();
@@ -232,6 +232,14 @@ function lidmaatschap_historie_create($lidmaatschap_config, $newvalues){
     }
   }
 
+  // empty MaatschappijVan and MaatschappijNaar, or else it wil show "geen" in the lidmaatschap historie activity
+  if(!isset($activity_params['custom_' . $lidmaatschap_historie_custom_fields_by_name['MaatschappijVan']['id']])){
+    $activity_params['custom_' . $lidmaatschap_historie_custom_fields_by_name['MaatschappijVan']['id']] = "";
+  }
+  if(!isset($activity_params['custom_' . $lidmaatschap_historie_custom_fields_by_name['MaatschappijNaar']['id']])){
+    $activity_params['custom_' . $lidmaatschap_historie_custom_fields_by_name['MaatschappijNaar']['id']] = "";
+  }
+  
   $activity_params['details'] = '<p>' . $details . '</p>';
   
   return $activity_params;
@@ -272,15 +280,10 @@ function lidmaatschap_historie_edit($lidmaatschap_config, $newvalues, $oldvalues
     }
   }
     
-  echo('<pre>');
-  print_r($changed_values);
-  echo('</pre>');
-  //CRM_Utils_System::civiExit();
-  
   // if there is nothing changed don create a lidmaatschap hsitorie activity
   if(!$is_changed){
     return false;
-  }
+  }  
   
   $lidmaatschap_historie_custom_fields_by_name = $lidmaatschap_config->get_lidmaatschap_historie_custom_fields_by_name();
   $lidmaataschap_custom_fields = $lidmaatschap_config->get_lidmaatschap_custom_fields();
@@ -389,22 +392,17 @@ function lidmaatschap_historie_edit($lidmaatschap_config, $newvalues, $oldvalues
         }
     }
   }
-  
+    
   // empty MaatschappijVan and MaatschappijNaar, or else it wil show "geen" in the lidmaatschap historie activity
   if(!isset($activity_params['custom_' . $lidmaatschap_historie_custom_fields_by_name['MaatschappijVan']['id']])){
-    $activity_params['custom_' . $lidmaatschap_historie_custom_fields_by_name['MaatschappijVan']['id']] = NULL;
+    $activity_params['custom_' . $lidmaatschap_historie_custom_fields_by_name['MaatschappijVan']['id']] = "";
   }
   if(!isset($activity_params['custom_' . $lidmaatschap_historie_custom_fields_by_name['MaatschappijNaar']['id']])){
-    $activity_params['custom_' . $lidmaatschap_historie_custom_fields_by_name['MaatschappijNaar']['id']] = NULL;
+    $activity_params['custom_' . $lidmaatschap_historie_custom_fields_by_name['MaatschappijNaar']['id']] = "";
   }
 
   $activity_params['details'] = '<p>' . $details . '</p>';
-  
-  echo('<pre>');
-  print_r($activity_params);
-  echo('</pre>');
-  //CRM_Utils_System::civiExit();
-  
+    
   return $activity_params;
 }
 
@@ -471,9 +469,6 @@ function lidmaatschap_historie_new_values($params){
 
 function lidmaatschap_historie_activity($lidmaatschap_config, $params, $activity_params){
   $date_time = date('Y-m-d H:i:s');
-
-  
-  
   
   $session = CRM_Core_Session::singleton();
   $source_contact_id = $session->get('userID');
@@ -495,8 +490,6 @@ function lidmaatschap_historie_activity($lidmaatschap_config, $params, $activity
     'target_contact_id' => $params['contact_id'],
   ));
   
-  
-  
   // get display name
   try {
     $contact_params = array(
@@ -511,10 +504,6 @@ function lidmaatschap_historie_activity($lidmaatschap_config, $params, $activity
     throw new Exception('Could not get value display name from contact, '
       . 'error from API Contact getvalue: '.$ex->getMessage());
   }     	
-
-  echo('<pre>');
-  print_r($activity_params);
-  echo('</pre>');
   
   try {
     $activity_result = civicrm_api('Activity', 'create', $activity_params);
@@ -530,6 +519,4 @@ function lidmaatschap_historie_activity($lidmaatschap_config, $params, $activity
       . 'error from API Activity create: '.$ex->getMessage());
     CRM_Core_Session::setStatus( 'Could not try to create activity lidmaatschap historie, error from API Activity create: '.$ex->getMessage(), ts('nl.vnv.lidmaatschap'), 'error');
   }
-  
-  CRM_Utils_System::civiExit();
 }
