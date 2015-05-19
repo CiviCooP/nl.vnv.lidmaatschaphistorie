@@ -135,7 +135,7 @@ function lidmaatschap_historie($op, $id, $params){
     $oldvalues = lidmaatschap_historie_old_values($id);   
     
     $activity_params = lidmaatschap_historie_edit($lidmaatschap_config, $newvalues, $oldvalues);
-  }
+  } 
   
   if('create' == $op or 'edit' == $op){
     if($activity_params){ // if there are no activity params (nothing has changed) don not create a lidmaatschap historie activity
@@ -231,14 +231,6 @@ function lidmaatschap_historie_create($lidmaatschap_config, $newvalues){
         }
     }
   }
-
-  // empty MaatschappijVan and MaatschappijNaar, or else it wil show "geen" in the lidmaatschap historie activity
-  if(!isset($activity_params['custom_' . $lidmaatschap_historie_custom_fields_by_name['MaatschappijVan']['id']])){
-    $activity_params['custom_' . $lidmaatschap_historie_custom_fields_by_name['MaatschappijVan']['id']] = "";
-  }
-  if(!isset($activity_params['custom_' . $lidmaatschap_historie_custom_fields_by_name['MaatschappijNaar']['id']])){
-    $activity_params['custom_' . $lidmaatschap_historie_custom_fields_by_name['MaatschappijNaar']['id']] = "";
-  }
   
   $activity_params['details'] = '<p>' . $details . '</p>';
   
@@ -274,7 +266,7 @@ function lidmaatschap_historie_edit($lidmaatschap_config, $newvalues, $oldvalues
     if(!isset($oldvalues[$field]) or $newvalue != $oldvalues[$field]){
       $is_changed = true;
       if(!isset($oldvalues[$field])){
-        $oldvalues[$field] = '';
+        $oldvalues[$field] = ts('geen');
       }
       $changed_values[$field] = array('new' => $newvalue, 'old' => $oldvalues[$field]);
     }
@@ -287,6 +279,7 @@ function lidmaatschap_historie_edit($lidmaatschap_config, $newvalues, $oldvalues
   
   $lidmaatschap_historie_custom_fields_by_name = $lidmaatschap_config->get_lidmaatschap_historie_custom_fields_by_name();
   $lidmaataschap_custom_fields = $lidmaatschap_config->get_lidmaatschap_custom_fields();
+  $lidmaatschap_custom_fields_by_name = $lidmaatschap_config->get_lidmaatschap_custom_fields_by_name();
   
   $activity_params = array();
   
@@ -392,15 +385,45 @@ function lidmaatschap_historie_edit($lidmaatschap_config, $newvalues, $oldvalues
         }
     }
   }
+  
+  /**
+   * If the fields membership_type_id, status_id and Maatschappij-lid are not changed, then it must be filled
+   * with the current value. A request of the client
+   */
+  
+  // membership_type_id
+  // LidmaatschapsTypeVan
+  if(!isset($activity_params['custom_' . $lidmaatschap_historie_custom_fields_by_name['LidmaatschapsTypeVan']['id']]) or empty($activity_params['custom_' . $lidmaatschap_historie_custom_fields_by_name['LidmaatschapsTypeVan']['id']])){
+    $activity_params['custom_' . $lidmaatschap_historie_custom_fields_by_name['LidmaatschapsTypeVan']['id']] = $newvalues['membership_type_id'];
+  }
+  
+  // LidmaatschapsTypeNaar
+  if(!isset($activity_params['custom_' . $lidmaatschap_historie_custom_fields_by_name['LidmaatschapsTypeNaar']['id']]) or empty($activity_params['custom_' . $lidmaatschap_historie_custom_fields_by_name['LidmaatschapsTypeNaar']['id']])){
+    $activity_params['custom_' . $lidmaatschap_historie_custom_fields_by_name['LidmaatschapsTypeNaar']['id']] = $newvalues['membership_type_id'];
+  }
+  
+  // status_id
+  // LidmaatschapsStatusVan
+  if(!isset($activity_params['custom_' . $lidmaatschap_historie_custom_fields_by_name['LidmaatschapsStatusVan']['id']]) or empty($activity_params['custom_' . $lidmaatschap_historie_custom_fields_by_name['LidmaatschapsStatusVan']['id']])){
+    $activity_params['custom_' . $lidmaatschap_historie_custom_fields_by_name['LidmaatschapsStatusVan']['id']] = $newvalues['status_id'];
+  }
+  
+  // LidmaatschapsStatusNaar
+  if(!isset($activity_params['custom_' . $lidmaatschap_historie_custom_fields_by_name['LidmaatschapsStatusNaar']['id']]) or empty($activity_params['custom_' . $lidmaatschap_historie_custom_fields_by_name['LidmaatschapsStatusNaar']['id']])){
+    $activity_params['custom_' . $lidmaatschap_historie_custom_fields_by_name['LidmaatschapsStatusNaar']['id']] = $newvalues['status_id'];
+  }
     
-  // empty MaatschappijVan and MaatschappijNaar, or else it wil show "geen" in the lidmaatschap historie activity
-  if(!isset($activity_params['custom_' . $lidmaatschap_historie_custom_fields_by_name['MaatschappijVan']['id']])){
-    $activity_params['custom_' . $lidmaatschap_historie_custom_fields_by_name['MaatschappijVan']['id']] = "";
+  // Maatschappij-lid
+  // MaatschappijVan
+  if(!isset($activity_params['custom_' . $lidmaatschap_historie_custom_fields_by_name['LidmaatschapsTypeVan']['id']]) or empty($activity_params['custom_' . $lidmaatschap_historie_custom_fields_by_name['LidmaatschapsTypeVan']['id']])){
+    $activity_params['custom_' . $lidmaatschap_historie_custom_fields_by_name['LidmaatschapsTypeVan']['id']] = $newvalues['custom_' . $lidmaatschap_custom_fields_by_name['Maatschappij_lid']['id']];
   }
-  if(!isset($activity_params['custom_' . $lidmaatschap_historie_custom_fields_by_name['MaatschappijNaar']['id']])){
-    $activity_params['custom_' . $lidmaatschap_historie_custom_fields_by_name['MaatschappijNaar']['id']] = "";
+  
+  // MaatschappijNaar
+  if(!isset($activity_params['custom_' . $lidmaatschap_historie_custom_fields_by_name['LidmaatschapsTypeNaar']['id']]) or empty($activity_params['custom_' . $lidmaatschap_historie_custom_fields_by_name['LidmaatschapsTypeNaar']['id']])){
+    $activity_params['custom_' . $lidmaatschap_historie_custom_fields_by_name['LidmaatschapsTypeNaar']['id']] = $newvalues['custom_' . $lidmaatschap_custom_fields_by_name['Maatschappij_lid']['id']];
   }
-
+    
   $activity_params['details'] = '<p>' . $details . '</p>';
     
   return $activity_params;

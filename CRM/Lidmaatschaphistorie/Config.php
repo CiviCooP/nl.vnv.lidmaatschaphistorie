@@ -22,6 +22,7 @@ class CRM_Lidmaatschaphistorie_Config {
   protected $_lidmaatschap_custom_group_id = 0;
   protected $_lidmaatschap_custom_group = array();
   protected $_lidmaatschap_custom_fields = array();
+  protected $_lidmaatschap_custom_fields_by_name = array();
 
   /**
    * Constructor
@@ -34,7 +35,7 @@ class CRM_Lidmaatschaphistorie_Config {
     $this->set_lidmaatschap_historie_custom_group();
     $this->set_lidmaatschap_historie_custom_fields();
     $this->set_lidmaatschap_historie_option_values();
-    
+        
     $this->set_lidmaatschap_custom_group_id();
     $this->set_lidmaatschap_custom_group();
     $this->set_lidmaatschap_custom_fields();
@@ -319,7 +320,7 @@ class CRM_Lidmaatschaphistorie_Config {
   public function get_lidmaatschap_custom_group() {
     return $this->_lidmaatschap_custom_group;    
   }
-  
+
   
   /*
    * Set lidmaatschap custom fields
@@ -343,8 +344,16 @@ class CRM_Lidmaatschaphistorie_Config {
           'column_name' => $array['column_name'],
         );
         
+        $this->_lidmaatschap_custom_fields_by_name[$array['name']] = array(
+          'id' => $array['id'],
+          'name' => $array['name'],
+          'label' => $array['label'],
+          'column_name' => $array['column_name'],
+        );
+        
         if(isset($array['option_group_id']) and !empty($array['option_group_id'])){
           $this->_lidmaatschap_custom_fields[$array['id']]['option_group_id'] = $array['option_group_id'];
+          $this->_lidmaatschap_custom_fields_by_name[$array['name']]['option_group_id'] = $array['option_group_id'];
         }
       }
       
@@ -357,9 +366,16 @@ class CRM_Lidmaatschaphistorie_Config {
   }
   
   /*
-   * Get lidmaatschap historie custom fields
+   * Get lidmaatschap custom fields
    */
   public function get_lidmaatschap_custom_fields() {
     return $this->_lidmaatschap_custom_fields;
+  }
+  
+  /*
+   * Get lidmaatschap custom fields by name
+   */
+  public function get_lidmaatschap_custom_fields_by_name() {
+    return $this->_lidmaatschap_custom_fields_by_name;
   }
 }
