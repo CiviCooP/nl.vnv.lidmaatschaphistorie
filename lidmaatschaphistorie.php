@@ -136,7 +136,7 @@ function lidmaatschap_historie($op, $id, $params){
     
     $activity_params = lidmaatschap_historie_edit($lidmaatschap_config, $newvalues, $oldvalues);
   } 
-  
+    
   if('create' == $op or 'edit' == $op){
     if($activity_params){ // if there are no activity params (nothing has changed) don not create a lidmaatschap historie activity
       lidmaatschap_historie_activity($lidmaatschap_config, $params, $activity_params);
@@ -318,7 +318,7 @@ function lidmaatschap_historie_edit($lidmaatschap_config, $newvalues, $oldvalues
         break;
       case 'join_date':
         // if both are empty or 1970-01-01, do nothing
-        if((empty($values['old']) or '1970-01-01' == $values['old']) and (empty($values['old']) or '1970-01-01' == $values['new'])){
+        if((empty($values['old']) or '1970-01-01' == $values['old']) and (empty($values['new']) or '1970-01-01' == $values['new'])){
           
         }else if(empty($values['new'])) {
           $details .= '<br/>' . ts(sprintf('Lidsinds is van %s naar %s.', date('d-m-Y', strtotime($values['old']))));
@@ -333,7 +333,7 @@ function lidmaatschap_historie_edit($lidmaatschap_config, $newvalues, $oldvalues
         break;
       case 'start_date':
         // if both are empty or 1970-01-01, do nothing
-        if((empty($values['old']) or '1970-01-01' == $values['old']) and (empty($values['old']) or '1970-01-01' == $values['new'])){
+        if((empty($values['old']) or '1970-01-01' == $values['old']) and (empty($values['new']) or '1970-01-01' == $values['new'])){
           
         }else if(empty($values['new'])) {
           $details .= '<br/>' . ts(sprintf('Begindatum is van %s naar %s.', date('d-m-Y', strtotime($values['old'])), date('d-m-Y', strtotime($values['new']))));
@@ -348,7 +348,7 @@ function lidmaatschap_historie_edit($lidmaatschap_config, $newvalues, $oldvalues
         break;
       case 'end_date':
         // if both are empty or 1970-01-01, do nothing
-        if((empty($values['old']) or '1970-01-01' == $values['old']) and (empty($values['old']) or '1970-01-01' == $values['new'])){
+        if((empty($values['old']) or '1970-01-01' == $values['old']) and (empty($values['new']) or '1970-01-01' == $values['new'])){
           
         }else if(empty($values['new'])) {
           $details .= '<br/>' . ts(sprintf('Einddatum is van %s naar leeg.', date('d-m-Y', strtotime($values['old']))));
@@ -388,7 +388,7 @@ function lidmaatschap_historie_edit($lidmaatschap_config, $newvalues, $oldvalues
   
   /**
    * If the fields membership_type_id, status_id and Maatschappij-lid are not changed, then it must be filled
-   * with the current value. A request of the client
+   * with the current value not empty. A request of the client
    */
   
   // membership_type_id
@@ -415,13 +415,13 @@ function lidmaatschap_historie_edit($lidmaatschap_config, $newvalues, $oldvalues
     
   // Maatschappij-lid
   // MaatschappijVan
-  if(!isset($activity_params['custom_' . $lidmaatschap_historie_custom_fields_by_name['LidmaatschapsTypeVan']['id']]) or empty($activity_params['custom_' . $lidmaatschap_historie_custom_fields_by_name['LidmaatschapsTypeVan']['id']])){
-    $activity_params['custom_' . $lidmaatschap_historie_custom_fields_by_name['LidmaatschapsTypeVan']['id']] = $newvalues['custom_' . $lidmaatschap_custom_fields_by_name['Maatschappij_lid']['id']];
+  if(!isset($activity_params['custom_' . $lidmaatschap_historie_custom_fields_by_name['MaatschappijVan']['id']]) or empty($activity_params['custom_' . $lidmaatschap_historie_custom_fields_by_name['MaatschappijVan']['id']])){
+    $activity_params['custom_' . $lidmaatschap_historie_custom_fields_by_name['MaatschappijVan']['id']] = $newvalues['custom_' . $lidmaatschap_custom_fields_by_name['Maatschappij_lid']['id']];
   }
   
   // MaatschappijNaar
-  if(!isset($activity_params['custom_' . $lidmaatschap_historie_custom_fields_by_name['LidmaatschapsTypeNaar']['id']]) or empty($activity_params['custom_' . $lidmaatschap_historie_custom_fields_by_name['LidmaatschapsTypeNaar']['id']])){
-    $activity_params['custom_' . $lidmaatschap_historie_custom_fields_by_name['LidmaatschapsTypeNaar']['id']] = $newvalues['custom_' . $lidmaatschap_custom_fields_by_name['Maatschappij_lid']['id']];
+  if(!isset($activity_params['custom_' . $lidmaatschap_historie_custom_fields_by_name['MaatschappijNaar']['id']]) or empty($activity_params['custom_' . $lidmaatschap_historie_custom_fields_by_name['MaatschappijNaar']['id']])){
+    $activity_params['custom_' . $lidmaatschap_historie_custom_fields_by_name['MaatschappijNaar']['id']] = $newvalues['custom_' . $lidmaatschap_custom_fields_by_name['Maatschappij_lid']['id']];
   }
     
   $activity_params['details'] = '<p>' . $details . '</p>';
