@@ -79,6 +79,8 @@ class CRM_Lidmaatschaphistorie_Form_Report_LidmaatschapHistorie extends CRM_Repo
             'title' => ts('Source Contact Name'),
             'alias' => 'civicrm_contact_source',
             'no_repeat' => TRUE,
+            'default' => FALSE,
+            'no_display' => TRUE,
           ),
           'contact_assignee' =>
           array(
@@ -86,7 +88,8 @@ class CRM_Lidmaatschaphistorie_Form_Report_LidmaatschapHistorie extends CRM_Repo
             'title' => ts('Assignee Contact Name'),
             'alias' => 'civicrm_contact_assignee',
             'dbAlias' => "civicrm_contact_assignee.sort_name",
-            //'default' => TRUE,
+            'default' => FALSE,
+            'no_display' => TRUE,
           ),
           'contact_target' =>
           array(
