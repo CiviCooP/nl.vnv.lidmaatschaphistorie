@@ -80,7 +80,7 @@ class CRM_Lidmaatschaphistorie_Form_Report_LidmaatschapHistorie extends CRM_Repo
             'alias' => 'civicrm_contact_source',
             'no_repeat' => TRUE,
             'default' => FALSE,
-            'no_display' => TRUE,
+            'no_display' => TRUE, // dirty hack, if you save the report this field will always show up
           ),
           'contact_assignee' =>
           array(
@@ -89,7 +89,7 @@ class CRM_Lidmaatschaphistorie_Form_Report_LidmaatschapHistorie extends CRM_Repo
             'alias' => 'civicrm_contact_assignee',
             'dbAlias' => "civicrm_contact_assignee.sort_name",
             'default' => FALSE,
-            'no_display' => TRUE,
+            'no_display' => TRUE,// dirty hack, if you save the report this field will always show up
           ),
           'contact_target' =>
           array(
