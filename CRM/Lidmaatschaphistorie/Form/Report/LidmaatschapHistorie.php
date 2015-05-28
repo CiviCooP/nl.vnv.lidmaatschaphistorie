@@ -86,7 +86,7 @@ class CRM_Lidmaatschaphistorie_Form_Report_LidmaatschapHistorie extends CRM_Repo
             'title' => ts('Assignee Contact Name'),
             'alias' => 'civicrm_contact_assignee',
             'dbAlias' => "civicrm_contact_assignee.sort_name",
-            'default' => TRUE,
+            //'default' => TRUE,
           ),
           'contact_target' =>
           array(
@@ -214,20 +214,22 @@ class CRM_Lidmaatschaphistorie_Form_Report_LidmaatschapHistorie extends CRM_Repo
           ),
           'activity_type_id' =>
           array('title' => ts('Activity Type'),
+            'no_display' => TRUE,
             'required' => TRUE,
             'type' => CRM_Utils_Type::T_STRING,
           ),
           'activity_subject' =>
           array('title' => ts('Subject'),
-            'default' => TRUE,
+            //'default' => TRUE,
           ),
           'activity_date_time' =>
           array('title' => ts('Activity Date'),
+            'no_display' => TRUE,
             'required' => TRUE,
           ),
           'status_id' =>
           array('title' => ts('Activity Status'),
-            'default' => TRUE,
+            //'default' => TRUE,
             'type' => CRM_Utils_Type::T_STRING,
           ),
           'duration' =>
@@ -329,10 +331,24 @@ class CRM_Lidmaatschaphistorie_Form_Report_LidmaatschapHistorie extends CRM_Repo
       }
     }
     
+    /*
+     * Hack uncheck land field
+     */
+    $this->_columns['civicrm_address']['fields']['country_id']['default'] = false;
+    
+    
+    /*echo('<pre>');
+    print_r($this->_columns);
+    echo('</pre>');*/
+    
+    
+    
     $this->_groupFilter = TRUE;
     $this->_tagFilter = TRUE;
     parent::__construct();
             
+    
+    
     /*
      * $this->_lidmaatschap_historie_custom_group_id
      * Set custom fields default values and if check or not
@@ -369,7 +385,7 @@ class CRM_Lidmaatschaphistorie_Form_Report_LidmaatschapHistorie extends CRM_Repo
         $this->_columns[$lidmaatschap_custom_group['table_name']]['fields']['custom_' . $custom_field_id] = array(
           'name' => strtolower($custom_field['name']) . '_' . $custom_field_id,
           'title' => $custom_field['label'],
-          'default' => TRUE,
+          //'default' => TRUE,
         );
       }
       
