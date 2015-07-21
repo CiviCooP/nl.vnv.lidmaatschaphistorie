@@ -339,18 +339,9 @@ class CRM_Lidmaatschaphistorie_Form_Report_LidmaatschapHistorie extends CRM_Repo
      */
     $this->_columns['civicrm_address']['fields']['country_id']['default'] = false;
     
-    
-    /*echo('<pre>');
-    print_r($this->_columns);
-    echo('</pre>');*/
-    
-    
-    
     $this->_groupFilter = TRUE;
     $this->_tagFilter = TRUE;
     parent::__construct();
-            
-    
     
     /*
      * $this->_lidmaatschap_historie_custom_group_id

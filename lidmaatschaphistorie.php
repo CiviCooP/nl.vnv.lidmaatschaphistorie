@@ -121,8 +121,7 @@ function lidmaatschaphistorie_civicrm_pre( $op, $objectName, $id, &$params ){
   }
 }
 
-function lidmaatschap_historie($op, $id, $params){
-  
+function lidmaatschap_historie($op, $id, $params){  
   $lidmaatschap_config = CRM_Lidmaatschaphistorie_Config::singleton();
     
   if('create' == $op){
@@ -132,24 +131,24 @@ function lidmaatschap_historie($op, $id, $params){
   
   if('edit' == $op){
     $newvalues = lidmaatschap_historie_new_values($params);
-    $oldvalues = lidmaatschap_historie_old_values($id);   
+    $oldvalues = lidmaatschap_historie_old_values($id);    
     
     $activity_params = lidmaatschap_historie_edit($lidmaatschap_config, $newvalues, $oldvalues);
   } 
     
   if('create' == $op or 'edit' == $op){
-    if($activity_params){ // if there are no activity params (nothing has changed) don not create a lidmaatschap historie activity
+    if($activity_params){ // if there are no activity params (nothing has changed) don not create a lidmaatschap historie activity      
       lidmaatschap_historie_activity($lidmaatschap_config, $params, $activity_params);
     }
   }
-    
+  
   if('delete' == $op){
     foreach($params as $membership_id => $membership){
       $activity_params = lidmaatschap_historie_delete();
-
+      
       lidmaatschap_historie_activity($lidmaatschap_config, $membership, $activity_params);
     }
-  }  
+  }
 }
 
 function lidmaatschap_historie_create($lidmaatschap_config, $newvalues){  
@@ -287,7 +286,7 @@ function lidmaatschap_historie_edit($lidmaatschap_config, $newvalues, $oldvalues
   $details = ts(sprintf('Op %s is de lidmaatschap veranderd.', date('d-m-Y H:i:s', strtotime($date_time))));
   
   $activity_params['subject'] = ts(sprintf('Lidmaatschap veranderd op %s.', date('d-m-Y H:i:s', strtotime($date_time))));
-  
+    
   // loop through the changed values and set the paramter
   foreach($changed_values as $field => $values){
     switch($field){
@@ -353,9 +352,9 @@ function lidmaatschap_historie_edit($lidmaatschap_config, $newvalues, $oldvalues
         }else if(empty($values['new'])) {
           $details .= '<br/>' . ts(sprintf('Einddatum is van %s naar leeg.', date('d-m-Y', strtotime($values['old']))));
           
-        }else if('1970-01-01' == $values['old']){
+        }else if('1970-01-01' == $values['old'] or 'geen' == $values['old']){
           $details .= '<br/>' . ts(sprintf('Einddatum is van leeg naar %s.', date('d-m-Y', strtotime($values['new']))));
-          
+        
         }else {
           $details .= '<br/>' . ts(sprintf('Einddatum is van %s naar %s.', date('d-m-Y', strtotime($values['old'])), date('d-m-Y', strtotime($values['new']))));
         }
@@ -477,7 +476,7 @@ function lidmaatschap_historie_new_values($params){
       }elseif('join_date' == $field or 'start_date' == $field or 'end_date' == $field){
         $newvalues[$field] = substr($value, 0, 4) . '-' . substr($value, 4, 2) . '-' . substr($value, 6, 2);
         // if date is 1970-01-01 it is officially empty
-        if('1970-01-01' == $newvalues[$field]){
+        if('1970-01-01' == $newvalues[$field] or '--' == $newvalues[$field]){
           $newvalues[$field] = '';
         }
 
@@ -530,11 +529,11 @@ function lidmaatschap_historie_activity($lidmaatschap_config, $params, $activity
   
   try {
     $activity_result = civicrm_api('Activity', 'create', $activity_params);
-    
+        
     if(isset($activity_result['is_error']) and $activity_result['is_error']){
       CRM_Core_Session::setStatus( ts(sprintf('Could not create activity lidmaatschap historie, error from API Activity create: %s', $activity_result['error_message'])), ts('nl.vnv.lidmaatschap'), 'error');
     }else {
-      CRM_Core_Session::setStatus( ts(sprintf('Lidmaatschap historie voor de %s is automatisch toegevoegd.', $contact_result)), ts('Compleet'), 'success');
+      CRM_Core_Session::setStatus( ts(sprintf('Lidmaatschap historie voor de %s is automatisch toegevoegd.', $contact_result)), ts('Lidmaatschap Historie - Klaar'), 'success');
     }
 
   } catch (CiviCRM_API3_Exception $ex) {
