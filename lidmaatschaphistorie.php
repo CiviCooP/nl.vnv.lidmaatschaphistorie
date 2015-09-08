@@ -113,10 +113,10 @@ function lidmaatschaphistorie_civicrm_alterSettingsFolders(&$metaDataFolders = N
  * If the lidmaataschap is changed create a activity lidmaatschap historie with the changed values
  */
 function lidmaatschaphistorie_civicrm_pre( $op, $objectName, $id, &$params ){
-  $lidmaatschap_config = CRM_Lidmaatschaphistorie_Config::singleton();
-    
   // if it is membership and is alterted
   if('Membership' == $objectName){  
+    $lidmaatschap_config = CRM_Lidmaatschaphistorie_Config::singleton();
+    
     lidmaatschap_historie($op, $id, $params);
   }
 }
@@ -492,9 +492,6 @@ function lidmaatschap_historie_new_values($params){
 function lidmaatschap_historie_activity($lidmaatschap_config, $params, $activity_params){
   $date_time = date('Y-m-d H:i:s');
   
-  $session = CRM_Core_Session::singleton();
-  $source_contact_id = $session->get('userID');
-  
   $activity_params = array_merge($activity_params, array(
     'version' => 3,
     'sequential' => 1,
@@ -508,9 +505,21 @@ function lidmaatschap_historie_activity($lidmaatschap_config, $params, $activity
     'is_auto' => '1',
     'is_current_revision' => '1',
     'is_deleted' => '0',
-    'source_contact_id' => $source_contact_id,
     'target_contact_id' => $params['contact_id'],
   ));
+  
+  // check if there is a source_contact_id
+  // sometimes a memebership is created trough a drupal form when
+  // nobody is loggedin so there is no source_contact_id, and 
+  // if the source_contact_id is empty than the creation of the activity
+  // fails. The source_contact_id must always defined.
+  $session = CRM_Core_Session::singleton();
+  $source_contact_id = $session->get('userID');
+  if(!empty($source_contact_id)){
+    $activity_params['source_contact_id'] = $source_contact_id;
+  }else {
+    $activity_params['source_contact_id'] = $params['contact_id'];
+  }
   
   // get display name
   try {
