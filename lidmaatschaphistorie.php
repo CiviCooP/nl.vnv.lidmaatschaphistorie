@@ -508,11 +508,14 @@ function lidmaatschap_historie_activity($lidmaatschap_config, $params, $activity
     'target_contact_id' => $params['contact_id'],
   ));
   
-  // check if there is a source_contact_id
-  // sometimes a memebership is created trough a drupal form when
-  // nobody is loggedin so there is no source_contact_id, and 
-  // if the source_contact_id is empty than the creation of the activity
-  // fails. The source_contact_id must always defined.
+  /**
+   * BOSW1509035 vnv.nl - aanmelden via webform
+   * check if there is a source_contact_id
+   * sometimes a memebership is created trough a drupal form when
+   * nobody is loggedin so there is no source_contact_id, and 
+   * if the source_contact_id is empty than the creation of the activity
+   * fails. The source_contact_id must always defined.
+   */
   $session = CRM_Core_Session::singleton();
   $source_contact_id = $session->get('userID');
   if(!empty($source_contact_id)){
